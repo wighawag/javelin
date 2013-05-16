@@ -1,0 +1,16 @@
+*~
+*.swp
+haxelib/
+build/
+report/
+test/TestMain.hx
+test/TestSuite.hx
+.idea/
+*.iml
+tags
+haxelib.json
+.mlib
+.munit
+test.hxml
+run.n
+project.hxml

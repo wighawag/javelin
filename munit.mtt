@@ -1,0 +1,7 @@
+version=::version::
+src=test
+bin=build
+report=report
+hxml=test.hxml
+classPaths=::foreach classPaths::::__current__::,::end::
+

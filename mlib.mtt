@@ -1,0 +1,10 @@
+<mlib bin="haxelib">
+	<resources>
+	    ::foreach classPaths::	<resource type="src" path="::__current__::" dest="" />
+	    ::end::
+		<resource type="license" path="::licenseFile::" />
+		<resource type="run" path="::runFile::" />
+        ::foreach resources::	<resource  path="::path::" dest="::dest::" />
+	    ::end::
+	</resources>
+</mlib>

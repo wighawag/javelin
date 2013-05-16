@@ -1,0 +1,19 @@
+{
+  "name": "javelin",
+  "url" : "https://github.com/wighawag/javelin/",
+  "license": "Wighawag",
+  "tags": ["cross", "tool"],
+  "description": "A tool to manage projects using mlib and munit",
+  "version": "0.0.1",
+  "contributors": ["wighawag"],
+  "dependencies": {"munit":"*", "mlib":"*"},
+  
+  "licenseFile": "LICENSE.txt",
+  "classPaths": ["src"],
+  "targets": ["js", "swf", "cpp", "neko"],
+  "runMain" : "javelin.Javelin",
+  "runDependencies" : {"mlib":"*"},
+  "runClassPaths" : ["src"],
+  "runCompileTimeResources" : ["munit.mtt", "mlib.mtt", "haxelib.json.mtt", "test.hxml.mtt"],
+  "resources": {}
+}
