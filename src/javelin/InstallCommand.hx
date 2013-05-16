@@ -47,8 +47,8 @@ class InstallCommand extends JCommand{
         }
 
         var mlibTemplate = new Template(Resource.getString("mlib.mtt"));
-        var mlibContent = mlibTemplate.execute({licenseFile:project.licenseFile,classPaths:project.classPaths,runFile:runFile,resources:project.resources}); //TODO add resources ?
-        var mlibFile = File.create(".mlib", console.dir, true);
+        var mlibContent = mlibTemplate.execute({licenseFile:project.licenseFile,classPaths:project.classPaths,runFile:runFile,resources:project.resources,haxelibOutput:project.haxelibOutput}); //TODO add resources ?
+        var mlibFile = createFile(".mlib");
         mlibFile.writeString(mlibContent, false);
 
         var releaseNotes = console.prompt("release notes", 2);//TODO get rid for local install
@@ -64,10 +64,13 @@ class InstallCommand extends JCommand{
             contributors:project.contributors,
             dependencies:project.dependencies,
         });
-        var haxelibFile = File.create("haxelib.json", console.dir, true);
+        var haxelibFile = createFile("haxelib.json");
         haxelibFile.writeString(haxelibContent, false);
 
         var mlibReturnCode = Sys.command("haxelib", ["run", "mlib", "install"]);
+
+        deleteFiles();
+
         if(mlibReturnCode != 0){
             error("=> Failed to install");
         }

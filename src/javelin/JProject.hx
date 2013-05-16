@@ -23,6 +23,11 @@ class JProject{
     public var runClassPaths : Array<String>;
     public var runCompileTimeResources : Array<String>;
     public var resources : Array<{path:String,dest:String}>;
+    public var testSources : String;
+    public var testReport : String;
+    public var testBuild : String;
+    public var haxelibOutput : String;
+    
 
     private var data : Dynamic;
 
@@ -41,13 +46,17 @@ class JProject{
 
         dependencies = needDependencies("dependencies"); 
 
-        //Javelin specific :
+        //Javelin specific 
+        var defaultSource = "src";
+        if(haxelibProject){
+            defaultSource = "./";
+        }
         licenseFile = get("licenseFile","");
-        classPaths = getArray("classPaths", ["./"]); //TODO use src/main for javelin.json and ./ for haxelib.json
+        classPaths = getArray("classPaths", [defaultSource]);
         targets = getArray("targets", []);
         runMain = get("runMain", null);
         runDependencies = getDependencies("runDependencies",[]);
-        runClassPaths = getArray("runClassPaths", ["./"]); //TODO see above
+        runClassPaths = getArray("runClassPaths", [defaultSource]);
         runCompileTimeResources = getArray("runCompileTimeResources",[]);
 
         resources = new Array();
@@ -57,6 +66,11 @@ class JProject{
                 resources.push({path:resource,dest:dest});
             }
         }
+
+        testSources = get("testSources","test");
+        testReport = get("testReport", "test-report");
+        testBuild = get("testBuild", "test-build");
+        haxelibOutput = get("haxelibOutput","haxelib");
     }
 
     private function needDependencies(fieldName : String) : Array<{name:String,version:String}>{

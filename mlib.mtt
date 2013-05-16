@@ -1,4 +1,4 @@
-<mlib bin="haxelib">
+<mlib bin="::haxelibOutput::">
 	<resources>
 	    ::foreach classPaths::	<resource type="src" path="::__current__::" dest="" />
 	    ::end::

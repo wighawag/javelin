@@ -1,8 +1,8 @@
 *~
 *.swp
 haxelib/
-build/
-report/
+test-build/
+test-report/
 test/TestMain.hx
 test/TestSuite.hx
 .idea/

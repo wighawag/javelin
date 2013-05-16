@@ -1,7 +1,7 @@
 version=::version::
-src=test
-bin=build
-report=report
-hxml=test.hxml
+src=::testSources::
+bin=::testBuild::
+report=::testReport::
+hxml=::testHxml::
 classPaths=::foreach classPaths::::__current__::,::end::
 

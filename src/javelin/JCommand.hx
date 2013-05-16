@@ -1,12 +1,18 @@
 package javelin;
 
 import massive.sys.cmd.Command;
+import massive.sys.io.File;
+import haxe.ds.StringMap;
 
 class JCommand extends Command{
 
     private var project : JProject;
+
+    private var tmpFiles : StringMap<File>;
+
     public function new(){
         super();
+        tmpFiles = new StringMap();
     }
 
     override public function execute() : Void{
@@ -24,6 +30,41 @@ class JCommand extends Command{
         }
         var content = javelinFile.readString();
         project = new JProject(content, haxelibFile);
+    }
+
+    private function createFile(path : String, ?keep : Bool = true) : File{
+        var file = console.dir.resolveFile(path);
+        if(file.exists){
+            if(keep){
+                var tmpFile = File.createTempFile();
+                tmpFiles.set(path,tmpFile);
+                file.copyTo(tmpFile, true);
+            }
+            file.writeString(""); //emtpy the file
+        }else{
+            file.createFile();
+        }
+        return file;
+    }
+
+    private function deleteFiles() : Void{
+        for(path in tmpFiles.keys()){
+            deleteFile(path, false);
+        }
+        tmpFiles = new StringMap();
+    }
+
+    private function deleteFile(path : String, ?removeFromMap : Bool = true) : Void{
+        var file = console.dir.resolveFile(path);
+        var tmpFile = tmpFiles.get(path);
+        if(tmpFile != null){
+            tmpFile.moveTo(file, true);
+        }else{
+            file.deleteFile();
+        }
+        if(removeFromMap){
+            tmpFiles.remove(path);
+        }
     }
 
 }

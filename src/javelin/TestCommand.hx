@@ -12,9 +12,10 @@ class TestCommand extends JCommand{
 
     override public function execute() : Void{
         super.execute();
+        var testHxml = "test.hxml";
         var munitTemplate = new Template(Resource.getString("munit.mtt"));
-        var munitContent = munitTemplate.execute({version:project.version,classPaths:project.classPaths});
-        var munitFile = File.create(".munit",console.dir,true);
+        var munitContent = munitTemplate.execute({version:project.version,classPaths:project.classPaths,testBuild:project.testBuild,testSources:project.testSources,testHxml:testHxml, testReport:project.testReport});
+        var munitFile = createFile(".munit");
         munitFile.writeString(munitContent, false);
 
         var dependencies = new Array<String>();
@@ -26,8 +27,8 @@ class TestCommand extends JCommand{
             dependencies.push(dependencyString);
         }
         var testHxmlTemplate = new Template(Resource.getString("test.hxml.mtt"));
-        var testHxmlContent = testHxmlTemplate.execute({classPaths:project.classPaths,dependencies:dependencies,targets:project.targets});
-        var testHxmlFile = File.create("test.hxml", console.dir, true);//TODO test.hxml should be extracted from .munit?
+        var testHxmlContent = testHxmlTemplate.execute({classPaths:project.classPaths,dependencies:dependencies,targets:project.targets,testSources:project.testSources,testBuild:project.testBuild});
+        var testHxmlFile = createFile(testHxml);
         testHxmlFile.writeString(testHxmlContent, false);
 
         var args = ["run", "munit", "test", "-kill-browser"];
@@ -36,6 +37,9 @@ class TestCommand extends JCommand{
         }
 
         var munitReturnCode = Sys.command("haxelib", args);
+
+        deleteFiles();
+
         if(munitReturnCode != 0){
             error("=> Test Failed");
         }else{
