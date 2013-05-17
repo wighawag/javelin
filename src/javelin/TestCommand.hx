@@ -90,7 +90,7 @@ class TestCommand extends JCommand{
             var testHxmlFile = createFile(testHxml);
             testHxmlFile.writeString(testHxmlContent, false);
 
-            var args = ["run", "munit", "test", "-kill-browser"];
+            var args = ["run", "munit", "test","-result-exit-code", "-kill-browser"];
             for (target in project.targets){
                 args.push("-" + target);
             }
