@@ -1,3 +1,11 @@
+/****
+* Wighawag License:
+* - free to use for commercial and non commercial application
+* - provided the modification done to it are given back to the community
+* - use at your own risk
+* 
+****/
+
 package javelin;
 import haxe.Json;
 import haxe.ds.StringMap;
@@ -83,8 +91,9 @@ class JProject{
 
     private function getDependencies(fieldName : String, ?defaultValue :  Array<{name:String,version:String}> = null) : Array<{name:String,version:String}>{
         var dependencies : Array<{name : String, version : String}> = new Array();
-        for (dependency in Reflect.fields(data.dependencies)){
-            var version = Reflect.field(data.dependencies, dependency);
+        var field = Reflect.field(data,fieldName);
+        for (dependency in Reflect.fields(field)){
+            var version = Reflect.field(field, dependency);
             dependencies.push({name:dependency,version:version});
         }
         return dependencies;

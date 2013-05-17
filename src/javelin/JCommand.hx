@@ -1,3 +1,11 @@
+/****
+* Wighawag License:
+* - free to use for commercial and non commercial application
+* - provided the modification done to it are given back to the community
+* - use at your own risk
+* 
+****/
+
 package javelin;
 
 import massive.sys.cmd.Command;
@@ -9,10 +17,12 @@ class JCommand extends Command{
     private var project : JProject;
 
     private var tmpFiles : StringMap<File>;
+    private var pathsCreated : Array<String>;
 
     public function new(){
         super();
         tmpFiles = new StringMap();
+        pathsCreated = new Array();
     }
 
     override public function execute() : Void{
@@ -29,13 +39,17 @@ class JCommand extends Command{
             haxelibFile = true;
         }
         var content = javelinFile.readString();
-        project = new JProject(content, haxelibFile);
+        try{
+            project = new JProject(content, haxelibFile);
+        }catch(e:Dynamic){
+            error("Error parsing javelin project file (" + javelinFile.path + ") : " + e);
+        }
     }
 
-    private function createFile(path : String, ?keep : Bool = true) : File{
+    private function createFile(path : String, ?keepExisting : Bool = true) : File{
         var file = console.dir.resolveFile(path);
         if(file.exists){
-            if(keep){
+            if(keepExisting){
                 var tmpFile = File.createTempFile();
                 tmpFiles.set(path,tmpFile);
                 file.copyTo(tmpFile, true);
@@ -44,17 +58,17 @@ class JCommand extends Command{
         }else{
             file.createFile();
         }
+        pathsCreated.push(path);
         return file;
     }
 
     private function deleteFiles() : Void{
-        for(path in tmpFiles.keys()){
-            deleteFile(path, false);
+        while(pathsCreated.length>0){
+            deleteFile(pathsCreated.pop());
         }
-        tmpFiles = new StringMap();
     }
 
-    private function deleteFile(path : String, ?removeFromMap : Bool = true) : Void{
+    private function deleteFile(path : String) : Void{
         var file = console.dir.resolveFile(path);
         var tmpFile = tmpFiles.get(path);
         if(tmpFile != null){
@@ -62,9 +76,7 @@ class JCommand extends Command{
         }else{
             file.deleteFile();
         }
-        if(removeFromMap){
-            tmpFiles.remove(path);
-        }
+        tmpFiles.remove(path);
     }
 
 }

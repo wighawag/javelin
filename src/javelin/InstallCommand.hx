@@ -1,3 +1,11 @@
+/****
+* Wighawag License:
+* - free to use for commercial and non commercial application
+* - provided the modification done to it are given back to the community
+* - use at your own risk
+* 
+****/
+
 package javelin;
 import massive.sys.io.File;
 import sys.io.Process;
@@ -37,6 +45,7 @@ class InstallCommand extends JCommand{
                 runCompileArgs.push("-resource");
                 runCompileArgs.push(runCompileTimeResource + "@" + runCompileTimeResource);
             }
+            print("compiling : haxe " + runCompileArgs.join(" "));
             var runCompile = Sys.command("haxe", runCompileArgs);
             if(runCompile != 0){
                 error("=> failed to compile run.n file");
@@ -58,11 +67,11 @@ class InstallCommand extends JCommand{
             name:project.name,
             url:project.url,
             license:project.license,
-            tags:project.tags,
+            tags:printArray(project.tags),
             description:project.description,
             releaseNotes:releaseNotes,
-            contributors:project.contributors,
-            dependencies:project.dependencies,
+            contributors:printArray(project.contributors),
+            dependencies:printDependencies(project.dependencies),
         });
         var haxelibFile = createFile("haxelib.json");
         haxelibFile.writeString(haxelibContent, false);
@@ -75,5 +84,31 @@ class InstallCommand extends JCommand{
             error("=> Failed to install");
         }
 
+    }
+
+    private function printArray(arr : Array<String>) : String{
+        var str = "[]";
+        if(arr.length > 0){
+            str = "[\"" + arr.join("\",\"") + "\"]";
+        }
+        return str;
+    }
+
+    private function printDependencies(arr : Array<{name:String,version:String}>) : String{
+        var str = "{}";
+        if(arr.length > 0){
+            str = "{";
+            var counter = 0;
+            while(counter < arr.length){
+                var dependency = arr[counter];
+                if(counter > 0){
+                    str+=",";
+                }
+                str+="\"" + dependency.name + "\":\"" + dependency.version + "\"";
+                counter ++;
+            }
+            str+="}";
+        }
+        return str;
     }
 }

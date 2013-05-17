@@ -1,3 +1,11 @@
+/****
+* Wighawag License:
+* - free to use for commercial and non commercial application
+* - provided the modification done to it are given back to the community
+* - use at your own risk
+* 
+****/
+
 package javelin;
 import massive.sys.cmd.CommandLineRunner;
 
@@ -8,6 +16,7 @@ class Javelin extends CommandLineRunner {
     public function new(){
         super();
 
+        mapCommand(SetupCommand, "setup", [], "add javelin as command, require root access");
         mapCommand(TestCommand, "test", ["t"], "test the project");
         mapCommand(InstallCommand, "install", ["i"], "install the project locally");
 
@@ -16,7 +25,9 @@ class Javelin extends CommandLineRunner {
     }
 
     override function printHeader():Void{
-        print("Javelin - Copyright 2013 Wighawag"); 
+        var year = VersionMacro.getFullYear(); 
+        var version = VersionMacro.getVersion();
+        print('Javelin $version - Copyright $year Wighawag'); 
     }
 
 }

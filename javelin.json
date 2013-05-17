@@ -6,14 +6,14 @@
   "description": "A tool to manage projects using mlib and munit",
   "version": "0.0.1",
   "contributors": ["wighawag"],
-  "dependencies": {"munit":"*", "mlib":"*"},
+  "dependencies": {},
   
   "licenseFile": "LICENSE.txt",
   "classPaths": ["src"],
   "targets": ["js", "swf", "cpp", "neko"],
   "runMain" : "javelin.Javelin",
-  "runDependencies" : {"mlib":"*"},
+  "runDependencies" : {"mlib":""},
   "runClassPaths" : ["src"],
   "runCompileTimeResources" : ["munit.mtt", "mlib.mtt", "haxelib.json.mtt", "test.hxml.mtt"],
-  "resources": {}
+  "resources": {"javelin.sh":"javelin.sh","javelin.bat":"javelin.bat"}
 }

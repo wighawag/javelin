@@ -2,10 +2,10 @@
   "name": "::name::",
   "url" : "::url::",
   "license": "::license::",
-  "tags": [::foreach tags::::__current__::,::end::],
+  "tags": ::tags::,
   "description": "::description::",
   "version": "::version::",
   "releasenote": "::releaseNotes::",
-  "contributors": [::foreach contributors::::__current__::,::end::],
-  "dependencies": {::foreach dependencies::"::name::":"::version:",::end::}
+  "contributors": ::contributors::,
+  "dependencies": ::dependencies::
 }
