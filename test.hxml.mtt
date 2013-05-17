@@ -11,6 +11,7 @@
 -cp ::testSources::
 -swf-version 11
 -swf ::testBuild::/as3_test.swf
+::extra::
 
 --next
 
@@ -27,6 +28,7 @@
 -cp ::testSources::
 -swf-version 8
 -swf ::testBuild::/as2_test.swf
+::extra::
 
 --next
 
@@ -43,6 +45,7 @@
 
 -cp ::testSources::
 -js ::testBuild::/js_test.js
+::extra::
 
 --next
 
@@ -59,6 +62,7 @@
 
 -cp ::testSources::
 -neko ::testBuild::/neko_test.n
+::extra::
 
 --next
 
@@ -76,5 +80,6 @@
 -cp ::testSources::
 #-D HXCPP_M64
 -cpp ::testBuild::/cpp_test
+::extra::
 
 

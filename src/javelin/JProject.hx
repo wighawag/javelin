@@ -35,7 +35,8 @@ class JProject{
     public var testReport : String;
     public var testBuild : String;
     public var haxelibOutput : String;
-    
+    public var testExtraDependencies : Array<{name:String,version:String}>;
+    public var releaseNotes = "";
 
     private var data : Dynamic;
 
@@ -44,13 +45,13 @@ class JProject{
         data = Json.parse(json);
 
         // Haxelib subset :
-        name = need("name");
-        version = need("version");
-        url = need("url");
-        license = need("license");
-        tags = needArray("tags");
-        description = need("description");
-        contributors = needArray("contributors");
+        name = get("name");
+        version = get("version");
+        url = get("url");
+        license = get("license");
+        tags = getArray("tags");
+        description = get("description");
+        contributors = getArray("contributors");
 
         dependencies = needDependencies("dependencies"); 
 
@@ -59,10 +60,10 @@ class JProject{
         if(haxelibProject){
             defaultSource = "./";
         }
-        licenseFile = get("licenseFile","");
+        licenseFile = get("licenseFile",null, true);
         classPaths = getArray("classPaths", [defaultSource]);
         targets = getArray("targets", []);
-        runMain = get("runMain", null);
+        runMain = get("runMain", "");
         runDependencies = getDependencies("runDependencies",[]);
         runClassPaths = getArray("runClassPaths", [defaultSource]);
         runCompileTimeResources = getArray("runCompileTimeResources",[]);
@@ -79,6 +80,7 @@ class JProject{
         testReport = get("testReport", "test-report");
         testBuild = get("testBuild", "test-build");
         haxelibOutput = get("haxelibOutput","haxelib");
+        testExtraDependencies = getDependencies("testExtraDependencies",[]);
     }
 
     private function needDependencies(fieldName : String) : Array<{name:String,version:String}>{
@@ -99,18 +101,14 @@ class JProject{
         return dependencies;
     }
 
-    private function need(fieldName : String) : String{
-        var value = get(fieldName);
-        if(value == null){
-            throw "javaline project file need field '" + fieldName + "' as a String";
-        }
-        return value;
-    }
 
-    private function get(fieldName : String, ?defaultValue : String = null) : String{
+    private function get(fieldName : String, ?defaultValue : String = null, ?allowNull=false) : String{
         var value : String = cast(Reflect.field(data,fieldName));
         if (value == null){
             value = defaultValue;
+        }
+        if(value == null && !allowNull){
+            throw "javaline project file need field '" + fieldName + "' as a String";
         }
         return value;
     }
@@ -120,15 +118,38 @@ class JProject{
         if(arrayValue == null){
             arrayValue = defaultValue;
         }
-        return arrayValue;
-    }
-
-    private function needArray(fieldName : String) : Array<String>{
-        var arrayValue = getArray(fieldName, null);
         if(arrayValue == null){
              throw "javaline project file need field '" + fieldName + "' as a Array of String";
         }
         return arrayValue;
+    }
+
+    public function toString() : String{
+        return 'Javelin' + "\n"
+            + 'haxelib file: $haxelibProject' + "\n"
+            + 'name: $name' + "\n"
+            + 'version: $version' + "\n"
+            + 'url: $url' + "\n"
+            + 'license: $license' + "\n"
+            + 'licenseFile: $licenseFile' + "\n"
+            + 'mainClass: $mainClass' + "\n"
+            + 'tags: $tags' + "\n"
+            + 'description: $description' + "\n"
+            + 'contributors: $contributors' + "\n"
+            + 'dependencies: $dependencies' + "\n"
+            + 'classPaths: $classPaths' + "\n"
+            + 'targets: $targets' + "\n"
+            + 'runMain: $runMain' + "\n"
+            + 'runDependencies: $runDependencies' + "\n"
+            + 'runClassPaths: $runClassPaths' + "\n"
+            + 'runCompileTimeResources: $runCompileTimeResources' + "\n"
+            + 'resources: $resources' + "\n"
+            + 'testSources: $testSources' + "\n"
+            + 'testReport: $testReport' + "\n"
+            + 'testBuild: $testBuild' + "\n"
+            + 'haxelibOutput: $haxelibOutput' + "\n"
+            + 'testExtraDependencies: $testExtraDependencies' + "\n"
+            + 'releaseNotes: $releaseNotes' + "\n";
     }
 
 }

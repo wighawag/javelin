@@ -2,8 +2,8 @@
 	<resources>
 	    ::foreach classPaths::	<resource type="src" path="::__current__::" dest="" />
 	    ::end::
-		<resource type="license" path="::licenseFile::" />
-		<resource type="run" path="::runFile::" />
+		::if licenseFile::<resource type="license" path="::licenseFile::" />::end::
+		::if runFile::<resource type="run" path="::runFile::" />::end::
         ::foreach resources::	<resource  path="::path::" dest="::dest::" />
 	    ::end::
 	</resources>

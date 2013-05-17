@@ -25,8 +25,8 @@ class JCommand extends Command{
         pathsCreated = new Array();
     }
 
-    override public function execute() : Void{
-        super.execute();
+    override public function initialise() : Void{
+        super.initialise();
 
         var haxelibFile : Bool = false;
         var javelinFile = console.dir.resolveFile("javelin.json");
@@ -44,6 +44,12 @@ class JCommand extends Command{
         }catch(e:Dynamic){
             error("Error parsing javelin project file (" + javelinFile.path + ") : " + e);
         }
+
+        #if debug
+            print("=> debug");
+            print(project);
+        #end
+
     }
 
     private function createFile(path : String, ?keepExisting : Bool = true) : File{

@@ -19,7 +19,7 @@ class Javelin extends CommandLineRunner {
         mapCommand(SetupCommand, "setup", [], "add javelin as command, require root access");
         mapCommand(TestCommand, "test", ["t"], "test the project");
         mapCommand(InstallCommand, "install", ["i"], "install the project locally");
-
+        mapCommand(DeployCommand, "deploy", [], "deploy to haxelib");
         run();
 
     }
