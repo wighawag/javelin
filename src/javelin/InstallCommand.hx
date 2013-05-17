@@ -65,7 +65,7 @@ class InstallCommand extends TestCommand{
         var mlibReturnCode = -1;
         try{
             var mlibTemplate = new Template(Resource.getString("mlib.mtt"));
-            var mlibContent = mlibTemplate.execute({licenseFile:project.licenseFile,classPaths:project.classPaths,runFile:runFile,resources:project.resources,haxelibOutput:project.haxelibOutput}); //TODO add resources ?
+            var mlibContent = mlibTemplate.execute({licenseFile:project.licenseFile,classPaths:project.classPaths,runFile:runFile,resources:project.resources,haxelibOutput:project.haxelibOutput}); 
             var mlibFile = createFile(".mlib");
             mlibFile.writeString(mlibContent, false);
 
@@ -73,6 +73,7 @@ class InstallCommand extends TestCommand{
             var haxelibTemplate = new Template(Resource.getString("haxelib.json.mtt"));
             var haxelibContent = haxelibTemplate.execute({
                 name:project.name,
+                version:project.version,
                 url:project.url,
                 license:project.license,
                 tags:printArray(project.tags),
