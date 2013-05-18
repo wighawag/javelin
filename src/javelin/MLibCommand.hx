@@ -91,6 +91,7 @@ class MLibCommand extends BuildCommand{
             });
             var haxelibFile = createFile("haxelib.json");
             haxelibFile.writeString(haxelibContent, false);
+#if debug print(haxelibContent); #end
             mlibReturnCode = runMlib();
         }catch(e : Dynamic){
             print(e);
@@ -123,7 +124,7 @@ class MLibCommand extends BuildCommand{
         return str;
     }
 
-    private function printDependencies(arr : Array<{name:String,version:String}>) : String{
+    private function printDependencies(arr : Array<Dependency>) : String{
         var str = "{}";
         if(arr.length > 0){
             str = "{";
@@ -133,7 +134,13 @@ class MLibCommand extends BuildCommand{
                 if(counter > 0){
                     str+=",";
                 }
-                str+="\"" + dependency.name + "\":\"" + dependency.version + "\"";
+                var dependencyString = "\"" + dependency.name + "\"";
+                if(dependency.version != null){
+                    dependencyString += ":" + "\"" + dependency.version + "\"";
+                }else{
+                    dependencyString += ":" + "\"" +"\"";
+                }
+                str+=dependencyString;
                 counter ++;
             }
             str+="}";

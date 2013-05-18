@@ -23,11 +23,11 @@ class JProject{
     public var tags : Array<String>;
     public var description : String;
     public var contributors : Array<String>;
-    public var dependencies : Array<{name:String,version:String}>;
+    public var dependencies : Array<Dependency>;
     public var classPaths : Array<String>;
     public var targets : Array<String>;
     public var runMain : String;
-    public var runDependencies : Array<{name:String,version:String}>;
+    public var runDependencies : Array<Dependency>;
     public var runClassPaths : Array<String>;
     public var runCompileTimeResources : Array<String>;
     public var resources : Array<{path:String,dest:String}>;
@@ -35,7 +35,7 @@ class JProject{
     public var testReport : String;
     public var testBuild : String;
     public var haxelibOutput : String;
-    public var testExtraDependencies : Array<{name:String,version:String}>;
+    public var testExtraDependencies : Array<Dependency>;
     public var releaseNotes = "";
 
     private var data : Dynamic;
@@ -83,7 +83,7 @@ class JProject{
         testExtraDependencies = getDependencies("testExtraDependencies",[]);
     }
 
-    private function needDependencies(fieldName : String) : Array<{name:String,version:String}>{
+    private function needDependencies(fieldName : String) : Array<Dependency>{
         var dependencies = getDependencies(fieldName, null);
         if(dependencies == null){
             throw "javelin project file need field '"+ fieldName +"'";
@@ -91,11 +91,14 @@ class JProject{
         return dependencies;
     }
 
-    private function getDependencies(fieldName : String, ?defaultValue :  Array<{name:String,version:String}> = null) : Array<{name:String,version:String}>{
-        var dependencies : Array<{name : String, version : String}> = new Array();
+    private function getDependencies(fieldName : String, ?defaultValue :  Array<Dependency> = null) : Array<Dependency>{
+        var dependencies = new Array<Dependency>();
         var field = Reflect.field(data,fieldName);
         for (dependency in Reflect.fields(field)){
             var version = Reflect.field(field, dependency);
+            if(version == "*" || version == ""){
+                version = null;
+            }
             dependencies.push({name:dependency,version:version});
         }
         return dependencies;

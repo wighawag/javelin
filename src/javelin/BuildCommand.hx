@@ -33,6 +33,8 @@ class BuildCommand extends TestCommand{
         }
         var runCompileArgs = project.getRunHaxeArguments();
         if(runCompileArgs != null){
+            var runFile = console.dir.resolveFile(MLibCommand.RUNFILE);
+            var runFileExisted = runFile.exists;
             if(debug){
                 runCompileArgs.push("-debug");
             }
@@ -41,8 +43,10 @@ class BuildCommand extends TestCommand{
             if(runCompile != 0){
                 error("=> failed to compile run.n file");
             }else{
-                //set RUNFLIE to be deleted (if the process continue on Install)
-                pathsCreated.push(console.dir.resolveFile(MLibCommand.RUNFILE).nativePath);
+                if(!runFileExisted){
+                    //set RUNFLIE to be deleted (if the process continue on Install)
+                    pathsCreated.push(console.dir.resolveFile(MLibCommand.RUNFILE).nativePath);
+                }
                 print("=> run.n compiled!");
             }
 

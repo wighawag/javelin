@@ -6,7 +6,7 @@
   "description": "A tool to manage projects using mlib and munit",
   "version": "0.0.1",
   "contributors": ["wighawag"],
-  "dependencies": {},
+  "dependencies": {"mlib":"","munit":""},
   
   "licenseFile": "LICENSE.txt",
   "classPaths": ["src"],

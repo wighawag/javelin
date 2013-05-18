@@ -12,7 +12,7 @@ import sys.io.Process;
 import haxe.Template;
 import haxe.Resource;
 
-class MunitCommand extends JCommand{
+class MunitCommand extends UpdateCommand{
 
     public function new(){
         super();
