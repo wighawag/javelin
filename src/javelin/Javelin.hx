@@ -20,6 +20,10 @@ class Javelin extends CommandLineRunner {
         mapCommand(TestCommand, "test", ["t"], "test the project");
         mapCommand(InstallCommand, "install", ["i"], "install the project locally");
         mapCommand(DeployCommand, "deploy", [], "deploy to haxelib");
+        mapCommand(CreateTestCommand, "createTest", ["ct"], "call munit to generate test (call 'munit help create' for help)");
+        mapCommand(TestReportCommand,"report",["r"], "call munit to get a test report (call 'munit help report' for help)");
+        mapCommand(LicenseCommand, "license", ["l"], "call mlib to add license test (call 'mlib help license' for help)");
+        //TODO (check with mlib for haxelib v2) mapCommand(IncrementVersionCommand, "incrementVersion", ["v"], "call mlib to increment version (call 'mlib help incrementVersion' for help)");
         run();
 
     }
