@@ -19,6 +19,10 @@ class JCommand extends Command{
     private var tmpFiles : StringMap<File>;
     private var pathsCreated : Array<String>;
 
+    private var debug : Bool = false;
+    private var doNotDeleteFileOnError : Bool = false;
+
+
     public function new(){
         super();
         tmpFiles = new StringMap();
@@ -27,6 +31,9 @@ class JCommand extends Command{
 
     override public function initialise() : Void{
         super.initialise();
+
+        debug = console.getOption("debug") == 'true';
+        doNotDeleteFileOnError = (console.getOption("noDeleteOnError") == 'true');
 
         var haxelibFile : Bool = false;
         var javelinFile = console.dir.resolveFile("javelin.json");
@@ -57,14 +64,14 @@ class JCommand extends Command{
         if(file.exists){
             if(keepExisting){
                 var tmpFile = File.createTempFile();
-                tmpFiles.set(path,tmpFile);
+                tmpFiles.set(file.nativePath,tmpFile);
                 file.copyTo(tmpFile, true);
             }
             file.writeString(""); //emtpy the file
         }else{
             file.createFile();
         }
-        pathsCreated.push(path);
+        pathsCreated.push(file.nativePath);
         return file;
     }
 

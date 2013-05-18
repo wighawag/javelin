@@ -12,12 +12,10 @@ import sys.io.Process;
 import haxe.Template;
 import haxe.Resource;
 
-class TestCommand extends JCommand{
+class TestCommand extends MunitCommand{
 
 
-    private var debug : Bool = false;
     private var skipTest : Bool = false;
-    private var doNotDeleteFileOnError : Bool = false;
 
     public function new(){
         super();
@@ -28,15 +26,12 @@ class TestCommand extends JCommand{
         #if debug
             print("initialising TestCommand");
         #end
-        debug = console.getOption("debug") == 'true';
         skipTest = (console.getOption("skipTest") == 'true');
-        doNotDeleteFileOnError = (console.getOption("noDeleteOnError") == 'true');
     }
 
-    override public function execute() : Void{
-        super.execute();
+    override function runMunit() : Int{
         if(skipTest){
-            return;
+            return 0;
         }
 
         var testSourcesDirectory = console.dir.resolveDirectory(project.testSources);
@@ -58,60 +53,43 @@ class TestCommand extends JCommand{
             error("ExampleTest.hx cannot be the qualified class name of a test. Munit, the test runner will overwrite if allowed");
         }
 
-        var munitReturnCode = -1;
-        try{
-            var extra = "";
-            if(debug){
-                extra = "-debug";
-            }
-            var testHxml = "test.hxml";
-            var munitTemplate = new Template(Resource.getString("munit.mtt"));
-            var munitContent = munitTemplate.execute({version:project.version,classPaths:project.classPaths,testBuild:project.testBuild,testSources:project.testSources,testHxml:testHxml, testReport:project.testReport});
-            var munitFile = createFile(".munit");
-            munitFile.writeString(munitContent, false);
+        // set for deletion:
+        pathsCreated.push(testMainFile.nativePath);
+        pathsCreated.push(testSuiteFile.nativePath);
+        pathsCreated.push(exampleTestFile.nativePath);
 
-            var dependencies = new Array<String>();
-            for (dependency in project.dependencies){
-                var dependencyString = dependency.name;
-                if(dependency.version != null && dependency.version != "" && dependency.version != "*"){
-                    dependencyString +=":"+dependency.version;
-                }
-                dependencies.push(dependencyString);
-            }
-            for (dependency in project.testExtraDependencies){
-                var dependencyString = dependency.name;
-                if(dependency.version != null && dependency.version != "" && dependency.version != "*"){
-                    dependencyString +=":"+dependency.version;
-                }
-                dependencies.push(dependencyString);
-            }
-            var testHxmlTemplate = new Template(Resource.getString("test.hxml.mtt"));
-            var testHxmlContent = testHxmlTemplate.execute({classPaths:project.classPaths,dependencies:dependencies,targets:project.targets,testSources:project.testSources,testBuild:project.testBuild,extra:extra});
-            var testHxmlFile = createFile(testHxml);
-            testHxmlFile.writeString(testHxmlContent, false);
-
-            var args = ["run", "munit", "test","-result-exit-code", "-kill-browser"];
-            for (target in project.targets){
-                args.push("-" + target);
-            }
-
-            munitReturnCode = Sys.command("haxelib", args);
-        }catch(e : Dynamic){
-            print(e);
+        var extra = "";
+        if(debug){
+            extra = "-debug";
         }
-        if(doNotDeleteFileOnError && munitReturnCode != 0){
-            print("keep file for investigation");
-        }else{
-            deleteFiles();
-            testMainFile.deleteFile();
-            testSuiteFile.deleteFile();
-            exampleTestFile.deleteFile();
+        var testHxml = "test.hxml";
+
+        var dependencies =new Array<String>();
+        for (dependency in project.dependencies){
+            var dependencyString = dependency.name;
+            if(dependency.version != null && dependency.version != "" && dependency.version != "*"){
+                dependencyString +=":"+dependency.version;
+            }
+            dependencies.push(dependencyString);
+        }
+        for (dependency in project.testExtraDependencies){
+            var dependencyString = dependency.name;
+            if(dependency.version != null && dependency.version != "" && dependency.version != "*"){
+                dependencyString +=":"+dependency.version;
+            }
+            dependencies.push(dependencyString);
+        }
+        var testHxmlTemplate = new Template(Resource.getString("test.hxml.mtt"));
+        var testHxmlContent = testHxmlTemplate.execute({classPaths:project.classPaths,dependencies:dependencies,targets:project.targets,testSources:project.testSources,testBuild:project.testBuild,extra:extra});
+        var testHxmlFile = createFile(testHxml);
+        testHxmlFile.writeString(testHxmlContent, false);
+
+        var args = ["run", "munit", "test","-result-exit-code", "-kill-browser"];
+        for (target in project.targets){
+            args.push("-" + target);
         }
 
-        if(munitReturnCode != 0){
-            error("=> Failure");
-        }else{
-            print("=> Success");
-        }
+        return Sys.command("haxelib", args);
+
     }
 }
