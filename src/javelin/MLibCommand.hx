@@ -12,9 +12,10 @@ import sys.io.Process;
 import haxe.Template;
 import haxe.Resource;
 
-class MLibCommand extends TestCommand{
+class MLibCommand extends BuildCommand{
 
     inline public static var RUNFILE : String = "run.n";
+    inline public static var LICENSE_FILE : String = "LICENSE.txt";
     public function new(){
         super();
     }
@@ -25,14 +26,56 @@ class MLibCommand extends TestCommand{
 
     override public function execute() : Void{
         super.execute();
-
+#if debug
+        print("executing MLibCommand");
+#end
         var mlibReturnCode = -1;
         try{
+            var licenseFileName = project.licenseFile;
+#if debug
+            print("debug: " + "license file : "  + licenseFileName);
+#end
+            var defaultLicenseFile = console.dir.resolveFile(LICENSE_FILE);
+            if(!defaultLicenseFile.exists){
+                if(licenseFileName == null){
+                    createFile(LICENSE_FILE);
+                    licenseFileName = LICENSE_FILE;
+                }else if(licenseFileName == LICENSE_FILE){
+                    error("Cannot find " + LICENSE_FILE);
+                }else{
+                    pathsCreated.push(defaultLicenseFile.nativePath);
+                }
+            }else{
+                if(licenseFileName == null){
+                    licenseFileName = LICENSE_FILE;
+                }else if(licenseFileName == LICENSE_FILE){
+                    //nothing to do
+                }else{
+                    createFile(LICENSE_FILE);
+                }
+            }
+#if debug
+            print("debug : "+ "license file : " + licenseFileName);
+#end
+            if(licenseFileName != LICENSE_FILE){
+                var licenseFile = console.dir.resolveFile(licenseFileName);
+                if(!licenseFile.exists){
+                    error("Cannot find " + licenseFileName);
+                }
+            }
             var mlibTemplate = new Template(Resource.getString("mlib.mtt"));
-            var mlibContent = mlibTemplate.execute({licenseFile:project.licenseFile,classPaths:project.classPaths,runFile:RUNFILE,resources:project.resources,haxelibOutput:project.haxelibOutput}); 
+            var mlibContent = mlibTemplate.execute({
+                licenseFile:licenseFileName,
+                classPaths:project.classPaths,
+                runFile:RUNFILE,
+                resources:project.resources,
+                haxelibOutput:project.haxelibOutput}); 
             var mlibFile = createFile(".mlib");
             mlibFile.writeString(mlibContent, false);
 
+#if debug
+            print(mlibContent);
+#end
 
             var haxelibTemplate = new Template(Resource.getString("haxelib.json.mtt"));
             var haxelibContent = haxelibTemplate.execute({

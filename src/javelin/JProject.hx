@@ -152,4 +152,29 @@ class JProject{
             + 'releaseNotes: $releaseNotes' + "\n";
     }
 
+    public function getRunHaxeArguments() : Array<String>{
+        if(runMain != null && runMain != ""){
+            var runCompileArgs = ["-neko", MLibCommand.RUNFILE, "-main", runMain];
+            for(runClassPath in runClassPaths){
+                runCompileArgs.push("-cp");
+                runCompileArgs.push(runClassPath);
+            }
+            for(runDependency in runDependencies){
+                runCompileArgs.push("-lib");
+                if(runDependency.version !=null && runDependency.version != "" && runDependency.version != "*"){
+                    runCompileArgs.push(runDependency.name + ":" + runDependency.version);
+                }else{
+                    runCompileArgs.push(runDependency.name);
+                }
+            }
+            for(runCompileTimeResource in runCompileTimeResources){
+                runCompileArgs.push("-resource");
+                runCompileArgs.push(runCompileTimeResource + "@" + runCompileTimeResource);
+            }
+           return runCompileArgs;
+        }else{
+            return null;
+        }
+    }
+
 }

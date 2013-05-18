@@ -6,4 +6,5 @@ test-report/
 .idea/
 *.iml
 tags
-project.hxml
+run.hxml
+run.n

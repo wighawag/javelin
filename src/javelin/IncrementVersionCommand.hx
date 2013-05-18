@@ -24,6 +24,7 @@ class IncrementVersionCommand extends MLibCommand{
             print("initialising IncrementVersionCommand");
         #end
         skipTest = true;
+        skipBuild = true;
     }
 
 

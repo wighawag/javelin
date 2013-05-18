@@ -24,6 +24,7 @@ class LicenseCommand extends MLibCommand{
             print("initialising LicenseCommand");
         #end
         skipTest = true;
+        skipBuild = true;
     }
 
 

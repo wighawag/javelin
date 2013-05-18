@@ -12,7 +12,7 @@ import sys.io.Process;
 import haxe.Template;
 import haxe.Resource;
 
-class InstallCommand extends MLibCommand{
+class UpdateCommand extends JCommand{
 
     public function new(){
         super();
@@ -20,14 +20,17 @@ class InstallCommand extends MLibCommand{
 
     override public function initialise():Void{
         super.initialise();
-        #if debug
-            print("initialising InstallCommand");
-        #end
     }
 
-
-    override private function runMlib() : Int{
-        return Sys.command("haxelib", ["run", "mlib", "install"]);
+    override public function execute() : Void{
+        super.execute();
+#if debug
+        print("executing UpdateCommand");
+#end
+        var runHxmlFile = console.dir.resolveFile("run.hxml");
+        var args = project.getRunHaxeArguments();
+        runHxmlFile.writeString(args.join("\n"));
+        print("=> Success");
     }
 
 }
