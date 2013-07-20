@@ -24,7 +24,7 @@ class JProject{
     public var description : String;
     public var contributors : Array<String>;
     public var dependencies : Array<Dependency>;
-    public var classPaths : Array<String>;
+    public var classPath : String;
     public var targets : Array<String>;
     public var runMain : String;
     public var runDependencies : Array<Dependency>;
@@ -37,6 +37,7 @@ class JProject{
     public var haxelibOutput : String;
     public var testExtraDependencies : Array<Dependency>;
     public var releaseNotes = "";
+    public var extraCompileParams : Array<String>;
 
     private var data : Dynamic;
 
@@ -61,7 +62,7 @@ class JProject{
             defaultSource = "./";
         }
         licenseFile = get("licenseFile",null, true);
-        classPaths = getArray("classPaths", [defaultSource]);
+        classPath = get("classPath", defaultSource);
         targets = getArray("targets", []);
         runMain = get("runMain", "");
         runDependencies = getDependencies("runDependencies",[]);
@@ -81,6 +82,8 @@ class JProject{
         testBuild = get("testBuild", "test-build");
         haxelibOutput = get("haxelibOutput","haxelib");
         testExtraDependencies = getDependencies("testExtraDependencies",[]);
+
+        extraCompileParams = getArray("extraCompileParams",[]);
     }
 
     private function needDependencies(fieldName : String) : Array<Dependency>{
@@ -140,7 +143,7 @@ class JProject{
             + 'description: $description' + "\n"
             + 'contributors: $contributors' + "\n"
             + 'dependencies: $dependencies' + "\n"
-            + 'classPaths: $classPaths' + "\n"
+            + 'classPath: $classPath' + "\n"
             + 'targets: $targets' + "\n"
             + 'runMain: $runMain' + "\n"
             + 'runDependencies: $runDependencies' + "\n"

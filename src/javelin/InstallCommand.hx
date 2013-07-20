@@ -27,7 +27,7 @@ class InstallCommand extends MLibCommand{
 
 
     override private function runMlib() : Int{
-        return Sys.command("haxelib", ["run", "mlib", "install"]);
+        return Sys.command("haxelib", ["run", "wighawag-mlib", "install"]);
     }
 
 }

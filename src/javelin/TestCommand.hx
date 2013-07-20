@@ -58,9 +58,9 @@ class TestCommand extends MunitCommand{
         pathsCreated.push(testSuiteFile.nativePath);
         pathsCreated.push(exampleTestFile.nativePath);
 
-        var extra = "";
+        var extra : Array<String> = project.extraCompileParams.copy();
         if(debug){
-            extra = "-debug";
+            extra.push("-debug");
         }
         var testHxml = "test.hxml";
 
@@ -80,7 +80,7 @@ class TestCommand extends MunitCommand{
             dependencies.push(dependencyString);
         }
         var testHxmlTemplate = new Template(Resource.getString("test.hxml.mtt"));
-        var testHxmlContent = testHxmlTemplate.execute({classPaths:project.classPaths,dependencies:dependencies,targets:project.targets,testSources:project.testSources,testBuild:project.testBuild,extra:extra});
+        var testHxmlContent = testHxmlTemplate.execute({classPaths:[project.classPath],dependencies:dependencies,targets:project.targets,testSources:project.testSources,testBuild:project.testBuild,extraCompileParams:extra});
         var testHxmlFile = createFile(testHxml);
         testHxmlFile.writeString(testHxmlContent, false);
 

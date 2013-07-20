@@ -40,6 +40,6 @@ class DeployCommand extends InstallCommand{
         if(code != 0){
             return code;
         }
-        return Sys.command("haxelib", ["run", "mlib", "submit"]);
+        return Sys.command("haxelib", ["run", "wighawag-mlib", "submit"]);
     }
 }

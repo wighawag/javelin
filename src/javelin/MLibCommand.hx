@@ -66,8 +66,8 @@ class MLibCommand extends BuildCommand{
             var mlibTemplate = new Template(Resource.getString("mlib.mtt"));
             var mlibContent = mlibTemplate.execute({
                 licenseFile:licenseFileName,
-                classPaths:project.classPaths,
-                runFile:RUNFILE,
+                classPaths:[project.classPath],
+                runFile:((project.runMain!=null && project.runMain != "")?RUNFILE:null),
                 resources:project.resources,
                 haxelibOutput:project.haxelibOutput}); 
             var mlibFile = createFile(".mlib");
@@ -76,6 +76,13 @@ class MLibCommand extends BuildCommand{
 #if debug
             print(mlibContent);
 #end
+
+            var deps : Array<Dependency> = null;
+            if(console.getOption("nodeps") == 'true'){
+                deps = [];
+            }else{
+                deps = project.dependencies;
+            }
 
             var haxelibTemplate = new Template(Resource.getString("haxelib.json.mtt"));
             var haxelibContent = haxelibTemplate.execute({
@@ -87,7 +94,7 @@ class MLibCommand extends BuildCommand{
                 description:project.description,
                 releaseNotes:project.releaseNotes,
                 contributors:printArray(project.contributors),
-                dependencies:printDependencies(project.dependencies),
+                dependencies:printDependencies(deps)
             });
             var haxelibFile = createFile("haxelib.json");
             haxelibFile.writeString(haxelibContent, false);

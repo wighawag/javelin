@@ -25,7 +25,7 @@ class MunitCommand extends UpdateCommand{
         try{
             var testHxml = "test.hxml";
             var munitTemplate = new Template(Resource.getString("munit.mtt"));
-            var munitContent = munitTemplate.execute({version:project.version,classPaths:project.classPaths,testBuild:project.testBuild,testSources:project.testSources,testHxml:testHxml, testReport:project.testReport});
+            var munitContent = munitTemplate.execute({version:project.version,classPaths:[project.classPath],testBuild:project.testBuild,testSources:project.testSources,testHxml:testHxml, testReport:project.testReport});
             var munitFile = createFile(".munit");
             munitFile.writeString(munitContent, false);
             munitReturnCode = runMunit();
