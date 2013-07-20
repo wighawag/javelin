@@ -4,7 +4,7 @@
   "license": "GPL",
   "tags": ["cross", "tool"],
   "description": "A tool to manage projects using mlib and munit",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "contributors": ["wighawag"],
   "dependencies": {"mlib-wighawag":"2.0.2","munit":"2.0.2"},
   
