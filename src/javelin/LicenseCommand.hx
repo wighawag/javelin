@@ -6,6 +6,8 @@
 * 
 ****/
 
+
+
 package javelin;
 import massive.sys.io.File;
 import sys.io.Process;
@@ -29,7 +31,7 @@ class LicenseCommand extends MLibCommand{
 
 
     override private function runMlib() : Int{
-        var args = ["run", "wighawag-mlib", "license"];
+        var args = ["run", "mlib-wighawag", "license"];
         var i = 1;
         while(i<console.systemArgs.length-1){
             args.push(console.systemArgs[i]);

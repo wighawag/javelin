@@ -6,6 +6,8 @@
 * 
 ****/
 
+
+
 package javelin;
 import massive.sys.io.File;
 import sys.io.Process;
@@ -40,6 +42,6 @@ class DeployCommand extends InstallCommand{
         if(code != 0){
             return code;
         }
-        return Sys.command("haxelib", ["run", "wighawag-mlib", "submit"]);
+        return Sys.command("haxelib", ["run", "mlib-wighawag", "submit"]);
     }
 }

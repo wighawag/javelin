@@ -6,6 +6,8 @@
 * 
 ****/
 
+
+
 package javelin;
 import massive.sys.io.File;
 import sys.io.Process;
@@ -27,7 +29,7 @@ class InstallCommand extends MLibCommand{
 
 
     override private function runMlib() : Int{
-        return Sys.command("haxelib", ["run", "wighawag-mlib", "install"]);
+        return Sys.command("haxelib", ["run", "mlib-wighawag", "install"]);
     }
 
 }

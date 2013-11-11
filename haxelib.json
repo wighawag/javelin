@@ -4,15 +4,15 @@
   "license": "GPL",
   "tags": ["cross", "tool"],
   "description": "A tool to manage projects using mlib and munit",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "contributors": ["wighawag"],
-  "dependencies": {"mlib-wighawag":"2.0.2","munit":"2.0.2"},
+  "dependencies": {"mlib-wighawag":"2.0.3","munit":"2.0.2"},
   
   "licenseFile": "LICENSE.txt",
   "classPath": "src",
   "targets": ["js", "cpp", "neko"],
   "runMain" : "javelin.Javelin",
-  "runDependencies" : {"mlib-wighawag":"2.0.2"},
+  "runDependencies" : {"mlib-wighawag":"2.0.3"},
   "runClassPaths" : ["src"],
   "runCompileTimeResources" : ["munit.mtt", "mlib.mtt", "haxelib.json.mtt", "test.hxml.mtt"],
   "resources": {"javelin.sh":"javelin.sh","javelin.bat":"javelin.bat"}
